@@ -1,0 +1,77 @@
+name: run tests
+
+env:
+  GXX_VERSION: 11
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '**'
+
+jobs:
+  export_tag:
+    runs-on: ubuntu-latest
+    steps:
+    - name: export tag
+#      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      run: |
+        chcp 65001 #set code page to utf-8
+        echo ("TAG_NAME=" + $env:GITHUB_REF.replace('refs/tags/', '')) >> $env:GITHUB_ENV
+
+  linux:
+    needs: export_tag
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install compiler
+      run: |
+        sudo apt-get update
+        sudo apt-get install g++-${{ env.GXX_VERSION }} -y
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${{ env.GXX_VERSION }} ${{ env.GXX_VERSION }}00 --slave /usr/bin/gcc gcc /usr/bin/gcc-${{ env.GXX_VERSION }}
+    - name: compile godot-cpp
+      env:
+        CC: gcc
+        CXX: g++
+      run: |
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -B out -S .
+        cmake --build out --target godot-cpp -j4
+        cmake --build out -j4
+    - uses: actions/upload-artifact@v3
+      with:
+        name: linux-build
+        path: godot-cpp/
+        if-no-files-found: error
+
+  windows:
+    needs: export_tag
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v3
+    - name: compile godot-cpp
+      run: |
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"v143" -B out -S .
+        cmake --build out -j4
+    - uses: actions/upload-artifact@v3
+      with:
+        name: windows-build
+        path: godot-cpp/
+        if-no-files-found: error
+
+  publish:
+    needs: [linux, windows]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        path: artifacts
+    - name: merge-artifacts
+      run: |
+        mv artifacts/linux-build/godot-cpp godot-cpp
+        mv -f artifacts/windows-build/godot-cpp godot-cpp
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "godot-cpp"
+        artifactErrorsFailBuild: true
+        tag: ${{ env.TAG_NAME }}
