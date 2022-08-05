@@ -10,7 +10,7 @@ jobs:
     if: "startsWith(github.event.head_commit.message, 'update:')"
     runs-on: ubuntu-latest
     steps:
-    - name: echo "update token found."
+    - run: echo "update token found."
 
   linux:
     needs: token_check
