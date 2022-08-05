@@ -59,7 +59,7 @@ jobs:
         echo "$string" >> $GITHUB_ENV
     - name: compile godot-cpp
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"${{ env.MSVC_TOOLSET }" -B out -S .
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"${{ env.MSVC_TOOLSET }}" -B out -S .
         cmake --build out -j4
     - name: compress artifacts
       run: zip -r godot-cpp.zip godot-cpp
