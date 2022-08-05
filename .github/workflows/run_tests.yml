@@ -32,7 +32,7 @@ jobs:
         CC: gcc
         CXX: g++
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ TAG_NAME }} -B out -S .
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=$TAG_NAME -B out -S .
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - uses: actions/upload-artifact@v3
