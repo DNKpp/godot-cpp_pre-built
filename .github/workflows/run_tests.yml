@@ -37,7 +37,7 @@ jobs:
         cmake --build out -j4
     - uses: actions/upload-artifact@v3
       with:
-        name: linux-build
+        name: linux-x64-debug
         path: godot-cpp/
         if-no-files-found: error
 
@@ -58,7 +58,7 @@ jobs:
         cmake --build out -j4
     - uses: actions/upload-artifact@v3
       with:
-        name: windows-build
+        name: windows-x64-debug
         path: godot-cpp/
         if-no-files-found: error
 
@@ -77,8 +77,9 @@ jobs:
         path: artifacts
     - name: merge-artifacts
       run: |
-        mv artifacts/linux-build/godot-cpp godot-cpp
-        mv -f artifacts/windows-build/godot-cpp godot-cpp
+        mkdir godot-cpp
+        mv artifacts/linux-x64-debug godot-cpp/linux-x64-debug
+        mv -f artifacts/windows-x64-debug godot-cpp/windows-x64-debug
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "godot-cpp"
