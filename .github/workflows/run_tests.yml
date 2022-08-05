@@ -6,25 +6,20 @@ env:
 on: push
 
 jobs:
-  export_tag:
+  token_check:
     if: "startsWith(github.event.head_commit.message, 'update:')"
+    runs-on: ubuntu-latest
+
+  linux:
+    needs: token_check
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: export tag
-#      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       run: |
         string=${{ github.event.head_commit.message }}
         string="TAG_NAME: ${string/update:/}"
-        echo "$string"
-        #chcp 65001 #set code page to utf-8
-        echo "    $string" >> $env:GITHUB_ENV
-
-  linux:
-    needs: export_tag
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
+        echo "$string" >> $env:GITHUB_ENV
     - name: Install compiler
       run: |
         sudo apt-get update
@@ -45,10 +40,15 @@ jobs:
         if-no-files-found: error
 
   windows:
-    needs: export_tag
+    needs: token_check
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v3
+    - name: export tag
+      run: |
+        string=${{ github.event.head_commit.message }}
+        string="TAG_NAME: ${string/update:/}"
+        echo "$string" >> $env:GITHUB_ENV
     - name: compile godot-cpp
       run: |
         cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"v143" -B out -S .
@@ -64,6 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: export tag
+      run: |
+        string=${{ github.event.head_commit.message }}
+        string="TAG_NAME: ${string/update:/}"
+        echo "$string" >> $env:GITHUB_ENV
     - uses: actions/download-artifact@v3
       with:
         path: artifacts
