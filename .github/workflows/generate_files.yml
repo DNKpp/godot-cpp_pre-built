@@ -39,11 +39,10 @@ jobs:
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
-      run: zip -r godot-cpp.zip godot-cpp
+      run: zip -r linux-x64-debug.zip godot-cpp
     - uses: actions/upload-artifact@v3
       with:
-        name: linux-x64-debug
-        path: godot-cpp.zip
+        path: linux-x64-debug.zip
         if-no-files-found: error
 
   windows:
@@ -63,11 +62,10 @@ jobs:
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
-      run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'godot-cpp.zip'
+      run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'windows-x64-debug.zip'
     - uses: actions/upload-artifact@v3
       with:
-        name: windows-x64-debug
-        path: godot-cpp.zip
+        path: windows-x64-debug.zip
         if-no-files-found: error
 
   publish:
