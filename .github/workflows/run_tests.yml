@@ -75,9 +75,14 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         path: artifacts
+    - name: pack artifacts
+      run: |
+        cd artifacts
+        tar -zcvf linux-x64-debug.tar.gz linux-x64-debug
+        tar -zcvf windows-x64-debug.tar.gz windows-x64-debug
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "artifacts/linux-x64-debug,artifacts/windows-x64-debug"
+        artifacts: "artifacts/linux-x64-debug.tar.gz,artifacts/windows-x64-debug.tar.gz"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
         tag: v${{ env.TAG_NAME }}
