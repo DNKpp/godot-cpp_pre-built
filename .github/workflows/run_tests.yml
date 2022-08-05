@@ -3,21 +3,18 @@ name: run tests
 env:
   GXX_VERSION: 11
 
-on:
-  push:
-    # Pattern matched against refs/tags
-    tags:        
-      - '**'
+on: push
 
 jobs:
   export_tag:
+    if: "startsWith(github.event.head_commit.message, 'update:')"
     runs-on: ubuntu-latest
     steps:
     - name: export tag
 #      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       run: |
         chcp 65001 #set code page to utf-8
-        echo ("TAG_NAME=" + $env:GITHUB_REF.replace('refs/tags/', '')) >> $env:GITHUB_ENV
+        echo ("TAG_NAME=" + ${{ github.event.head_commit.message }}.replace('update:', '')) >> $env:GITHUB_ENV
 
   linux:
     needs: export_tag
