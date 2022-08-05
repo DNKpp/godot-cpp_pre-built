@@ -15,7 +15,7 @@ jobs:
 #      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       run: |
         string=${{ github.event.head_commit.message }}
-        string="TAG_NAME=${string/update:/}"
+        string="TAG_NAME: ${string/update:/}"
         echo "$string"
         #chcp 65001 #set code page to utf-8
         echo "$string" >> $env:GITHUB_ENV
