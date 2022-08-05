@@ -17,7 +17,11 @@ jobs:
         string=${string/update:/}
         echo "$string"
         #chcp 65001 #set code page to utf-8
-        echo ("TAG_NAME=" + $string) >> $env:GITHUB_ENV
+        #echo ("TAG_NAME=" + $string) >> $env:GITHUB_ENV
+    - uses: myci-actions/export-env-var@1
+      with:
+        name: TAG_NAME
+        value: $string
 
   linux:
     needs: export_tag
