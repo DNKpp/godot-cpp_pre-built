@@ -13,8 +13,10 @@ jobs:
     - name: export tag
 #      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       run: |
+        string=${{ github.event.head_commit.message }}
+        string=${string/update:/}
         chcp 65001 #set code page to utf-8
-        echo ("TAG_NAME=" + ${{ github.event.head_commit.message }}.replace('update:', '')) >> $env:GITHUB_ENV
+        echo ("TAG_NAME=" + $string) >> $env:GITHUB_ENV
 
   linux:
     needs: export_tag
