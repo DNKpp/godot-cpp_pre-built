@@ -10,17 +10,18 @@ jobs:
     if: "startsWith(github.event.head_commit.message, 'update:')"
     runs-on: ubuntu-latest
     steps:
-    - name: export tag
-      run: |
-        string="${{ github.event.head_commit.message }}"
-        string="TAG_NAME=${string/update:/}"
-        echo "$string" >> $GITHUB_ENV
+    - name: echo "update token found."
 
   linux:
     needs: token_check
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: export tag
+      run: |
+        string="${{ github.event.head_commit.message }}"
+        string="TAG_NAME=${string/update:/}"
+        echo "$string" >> $GITHUB_ENV
     - name: Install compiler
       run: |
         sudo apt-get update
@@ -47,9 +48,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: export tag
       run: |
-        string=${{ github.event.head_commit.message }}
-        string="TAG_NAME: ${string/update:/}"
-        echo "$string" >> $env:GITHUB_ENV
+        string="${{ github.event.head_commit.message }}"
+        string="TAG_NAME=${string/update:/}"
+        echo "$string" >> $GITHUB_ENV
     - name: compile godot-cpp
       run: |
         cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"v143" -B out -S .
@@ -67,9 +68,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: export tag
       run: |
-        string=${{ github.event.head_commit.message }}
-        string="TAG_NAME: ${string/update:/}"
-        echo "$string" >> $env:GITHUB_ENV
+        string="${{ github.event.head_commit.message }}"
+        string="TAG_NAME=${string/update:/}"
+        echo "$string" >> $GITHUB_ENV
     - uses: actions/download-artifact@v3
       with:
         path: artifacts
