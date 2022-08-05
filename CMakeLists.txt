@@ -24,7 +24,7 @@ add_custom_target(
 add_custom_command(
     TARGET ${PROJECT_NAME}
 	POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "godot-cpp source files \"${godot-cpp_TARGET_DIR}\""
+    COMMAND ${CMAKE_COMMAND} -E echo "godot-cpp artifact files \"${godot-cpp_TARGET_DIR}\""
 	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_BINARY_DIR}" "${godot-cpp_TARGET_DIR}"
 	DEPENDS "$<TARGET_FILE:godot-cpp>"
     VERBATIM

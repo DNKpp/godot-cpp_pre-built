@@ -60,6 +60,7 @@ jobs:
     - name: compile godot-cpp
       run: |
         cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"${{ env.MSVC_TOOLSET }}" -B out -S .
+        cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
       run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'godot-cpp.zip'
@@ -87,4 +88,5 @@ jobs:
         artifacts: "artifacts/linux-x64-debug.zip,artifacts/windows-x64-debug.zip"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
+        allowUpdates: true
         tag: v${{ env.TAG_NAME }}
