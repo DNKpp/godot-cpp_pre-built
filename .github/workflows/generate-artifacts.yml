@@ -1,4 +1,4 @@
-name: run tests
+name: genrate artifacts
 
 env:
   MSVC_TOOLSET: v143
