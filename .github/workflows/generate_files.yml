@@ -1,9 +1,12 @@
 name: run tests
 
 env:
+  MSVC_TOOLSET: v143
   GXX_VERSION: 11
 
-on: push
+on:
+  push:
+    branches: [main]
 
 jobs:
   token_check:
@@ -35,10 +38,12 @@ jobs:
         cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -B out -S .
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
+    - name: compress artifacts
+      run: zip -r godot-cpp.zip godot-cpp
     - uses: actions/upload-artifact@v3
       with:
         name: linux-x64-debug
-        path: godot-cpp/
+        path: godot-cpp.zip
         if-no-files-found: error
 
   windows:
@@ -54,12 +59,14 @@ jobs:
         echo "$string" >> $GITHUB_ENV
     - name: compile godot-cpp
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"v143" -B out -S .
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"${{ env.MSVC_TOOLSET }" -B out -S .
         cmake --build out -j4
+    - name: compress artifacts
+      run: zip -r godot-cpp.zip godot-cpp
     - uses: actions/upload-artifact@v3
       with:
         name: windows-x64-debug
-        path: godot-cpp/
+        path: godot-cpp.zip
         if-no-files-found: error
 
   publish:
@@ -77,7 +84,7 @@ jobs:
         path: artifacts
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "artifacts/linux-x64-debug.tar.gz,artifacts/windows-x64-debug.tar.gz"
+        artifacts: "artifacts/linux-x64-debug.zip,artifacts/windows-x64-debug.zip"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
         tag: v${{ env.TAG_NAME }}
