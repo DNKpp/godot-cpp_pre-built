@@ -38,7 +38,7 @@ jobs:
         CC: gcc
         CXX: g++
       run: |
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_mode }} -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -B out -S .
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_mode }} -Dgodot-cpp_pre-built_GODOT_CPP_TAG="${{ env.TAG_NAME }}" -B out -S .
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
@@ -65,7 +65,7 @@ jobs:
         echo "$string" >> $GITHUB_ENV
     - name: compile godot-cpp
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -T"${{ env.MSVC_TOOLSET }}" -B out -S .
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG="${{ env.TAG_NAME }}" -T"${{ env.MSVC_TOOLSET }}" -B out -S .
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
