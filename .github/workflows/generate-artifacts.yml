@@ -18,6 +18,9 @@ jobs:
   linux:
     needs: token_check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build_mode: [Debug, Release]
     steps:
     - uses: actions/checkout@v3
     - name: export tag
@@ -35,15 +38,15 @@ jobs:
         CC: gcc
         CXX: g++
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -B out -S .
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_mode }} -Dgodot-cpp_pre-built_GODOT_CPP_TAG=${{ env.TAG_NAME }} -B out -S .
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
-      run: zip -r linux-x64-debug.zip godot-cpp
+      run: zip -r linux-x64-${{ matrix.build_mode }}.zip godot-cpp
     - uses: actions/upload-artifact@v3
       with:
-        name: linux-x64-debug
-        path: linux-x64-debug.zip
+        name: linux-x64-${{ matrix.build_mode }}
+        path: linux-x64-${{ matrix.build_mode }}.zip
         if-no-files-found: error
 
   windows:
@@ -85,7 +88,7 @@ jobs:
         path: artifacts
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "artifacts/linux-x64-debug/linux-x64-debug.zip,artifacts/windows-x64-debug/windows-x64-debug.zip"
+        artifacts: "artifacts/linux-x64-debug/linux-x64-debug.zip,artifacts/linux-x64-release/linux-x64-release.zip,artifacts/windows-x64-debug/windows-x64-debug.zip"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
         allowUpdates: true
