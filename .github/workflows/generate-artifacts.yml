@@ -52,6 +52,9 @@ jobs:
   windows:
     needs: token_check
     runs-on: windows-2022
+    strategy:
+      matrix:
+        build_mode: [Debug]
     steps:
     - uses: actions/checkout@v3
     - name: export tag
@@ -66,11 +69,11 @@ jobs:
         cmake --build out --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
-      run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'windows-x64-debug.zip'
+      run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'windows-x64-${{ matrix.build_mode }}.zip'
     - uses: actions/upload-artifact@v3
       with:
-        name: windows-x64-debug
-        path: windows-x64-debug.zip
+        name: windows-x64-${{ matrix.build_mode }}
+        path: windows-x64-${{ matrix.build_mode }}.zip
         if-no-files-found: error
 
   publish:
@@ -88,7 +91,7 @@ jobs:
         path: artifacts
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "artifacts/linux-x64-debug/linux-x64-debug.zip,artifacts/linux-x64-release/linux-x64-release.zip,artifacts/windows-x64-debug/windows-x64-debug.zip"
+        artifacts: "artifacts/linux-x64-Debug/linux-x64-Debug.zip,artifacts/linux-x64-Release/linux-x64-Release.zip,artifacts/windows-x64-Debug/windows-x64-Debug.zip"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
         allowUpdates: true
