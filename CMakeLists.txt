@@ -20,11 +20,18 @@ add_custom_target(
     VERBATIM
 )
 
+message(STATUS "Bin: ${godot-cpp_BINARY_DIR}")
+
 add_custom_command(
     TARGET ${PROJECT_NAME}
 	POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "copy godot-cpp artifact files to \"${godot-cpp_TARGET_DIR}\""
-	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_BINARY_DIR}/bin" "${godot-cpp_TARGET_DIR}/bin"
+	# just a workaround, because godot-cpp switched its output dir
+	COMMAND ${CMAKE_COMMAND} -E make_directory "${godot-cpp_BINARY_DIR}/bin" "${godot-cpp_BINARY_DIR}/gen"
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_BINARY_DIR}/bin" "${godot-cpp_SOURCE_DIR}/bin"
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_BINARY_DIR}/gen" "${godot-cpp_SOURCE_DIR}/gen"
+
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_SOURCE_DIR}/bin" "${godot-cpp_TARGET_DIR}/bin"
 	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_BINARY_DIR}/gen" "${godot-cpp_TARGET_DIR}/gen"
 	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_SOURCE_DIR}/godot-headers" "${godot-cpp_TARGET_DIR}/godot-headers"
 	COMMAND ${CMAKE_COMMAND} -E copy_directory "${godot-cpp_SOURCE_DIR}/include" "${godot-cpp_TARGET_DIR}/include"
