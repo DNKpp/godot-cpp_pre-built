@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 project(godot-cpp)
 
-add_library(godot-cpp INTERFACE IMPORTED)
+add_library(godot-cpp INTERFACE IMPORTED GLOBAL)
 
 target_include_directories(
     godot-cpp
