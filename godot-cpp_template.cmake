@@ -22,3 +22,9 @@ target_link_directories(
     INTERFACE
     "lib"
 )
+
+target_link_libraries(
+    godot-cpp
+    INTERFACE
+    ${LIBS}
+)
