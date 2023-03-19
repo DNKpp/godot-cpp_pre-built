@@ -28,3 +28,15 @@ target_link_libraries(
     INTERFACE
     ${LIBS}
 )
+
+target_compile_definitions(
+    godot-cpp
+    INTERFACE
+	$<$<CONFIG:Debug>:
+		DEBUG_ENABLED
+		DEBUG_METHODS_ENABLED
+	>
+	$<$<CXX_COMPILER_ID:MSVC>:
+		TYPED_METHOD_BIND
+	>
+)
