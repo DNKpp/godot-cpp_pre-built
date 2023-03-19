@@ -54,7 +54,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        build_mode: [Debug]
+        build_mode: [Debug, Release]
     steps:
     - uses: actions/checkout@v3
     - name: export tag
@@ -65,8 +65,8 @@ jobs:
         echo "$string" >> $GITHUB_ENV
     - name: compile godot-cpp
       run: |
-        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG="${{ env.TAG_NAME }}" -T"${{ env.MSVC_TOOLSET }}" -B out -S .
-        cmake --build out --target godot-cpp -j4
+        cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG="${{ env.TAG_NAME }}" -T"${{ env.MSVC_TOOLSET }}" -Ax64 -B out -S .
+        cmake --build out --config ${{ matrix.build_mode }} --target godot-cpp -j4
         cmake --build out -j4
     - name: compress artifacts
       run: Compress-Archive -Path 'godot-cpp' -DestinationPath 'windows-x64-${{ matrix.build_mode }}.zip'
@@ -91,7 +91,7 @@ jobs:
         path: artifacts
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "artifacts/linux-x64-Debug/linux-x64-Debug.zip,artifacts/linux-x64-Release/linux-x64-Release.zip,artifacts/windows-x64-Debug/windows-x64-Debug.zip"
+        artifacts: "artifacts/linux-x64-Debug/linux-x64-Debug.zip,artifacts/linux-x64-Release/linux-x64-Release.zip,artifacts/windows-x64-Debug/windows-x64-Debug.zip,artifacts/windows-x64-Release/windows-x64-Release.zip"
         artifactErrorsFailBuild: true
         replacesArtifacts: true
         allowUpdates: true
