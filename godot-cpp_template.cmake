@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.24)
 
 project(godot-cpp)
 
@@ -7,25 +7,18 @@ add_library(godot-cpp INTERFACE IMPORTED GLOBAL)
 target_include_directories(
     godot-cpp
     INTERFACE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/godot-headers"
-    "${CMAKE_CURRENT_SOURCE_DIR}/gen/include"
+    "include"
+    "gdextension"
 )
 
 file(
     GLOB LIBS
-    "${CMAKE_CURRENT_SOURCE_DIR}/bin/*.lib"
-    "${CMAKE_CURRENT_SOURCE_DIR}/bin/*.a"
+    "lib/*.lib"
+    "lib/*.a"
 )
 
 target_link_directories(
     godot-cpp
     INTERFACE
-    "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-)
-
-target_link_libraries(
-    godot-cpp
-    INTERFACE
-    ${LIBS}
+    "lib"
 )
