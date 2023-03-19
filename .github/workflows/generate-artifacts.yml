@@ -69,7 +69,7 @@ jobs:
       run: |
         cmake -Dgodot-cpp_pre-built_GODOT_CPP_TAG="${{ env.TAG_NAME }}" -G"Visual Studio 17 2022" -T"${{ env.MSVC_TOOLSET }}" -Ax64 -B ${{ env.BUILD_FOLDER }} -S .
         cmake --build ${{ env.BUILD_FOLDER }} --config ${{ matrix.build_mode }} -j4
-        cmake --install ${{ env.BUILD_FOLDER }} --prefix ${{ env.PACKAGE_FOLDER }}
+        cmake --install ${{ env.BUILD_FOLDER }} --prefix ${{ env.PACKAGE_FOLDER }} --config ${{ matrix.build_mode }}
     - name: compress artifacts
       run: Compress-Archive -Path '${{ env.PACKAGE_FOLDER }}' -DestinationPath 'windows-x64-${{ matrix.build_mode }}.zip'
     - uses: actions/upload-artifact@v3
