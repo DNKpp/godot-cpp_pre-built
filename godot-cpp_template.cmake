@@ -8,7 +8,6 @@ target_include_directories(
     godot-cpp
     INTERFACE
     "include"
-    "gdextension"
 )
 
 file(
