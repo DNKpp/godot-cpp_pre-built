@@ -13,7 +13,7 @@
 			"variables": [
 				{
 					"name": "godot-cpp_pre-built_GODOT_CPP_TAG",
-					"value": "9e210c1a02f9ac75c29628403da0533f64158914",
+					"value": "godot-4.0-stable",
 					"type": "STRING"
 				}
 			]
