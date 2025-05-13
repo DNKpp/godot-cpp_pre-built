@@ -5,6 +5,7 @@ project(godot-cpp_pre-built)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include("get_cpm")
 
+set(GODOTCPP_DISABLE_EXCEPTIONS OFF)
 CPMAddPackage(
 	NAME godot-cpp
 	GIT_TAG ${${PROJECT_NAME}_GODOT_CPP_TAG}

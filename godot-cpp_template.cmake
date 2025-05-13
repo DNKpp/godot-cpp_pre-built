@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.12)
 
 project(godot-cpp)
 
+set(GODOTCPP_DISABLE_EXCEPTIONS OFF)
 add_library(godot-cpp INTERFACE IMPORTED GLOBAL)
 
 target_include_directories(
