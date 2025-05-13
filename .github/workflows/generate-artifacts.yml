@@ -45,7 +45,7 @@ jobs:
         cmake --install ${{ env.BUILD_FOLDER }} --prefix ${{ env.PACKAGE_FOLDER }}
     - name: compress artifacts
       run: zip -r linux-x64-${{ matrix.build_mode }}.zip ${{ env.PACKAGE_FOLDER }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: linux-x64-${{ matrix.build_mode }}
         path: linux-x64-${{ matrix.build_mode }}.zip
@@ -88,7 +88,7 @@ jobs:
         string="${{ github.event.head_commit.message }}"
         string="TAG_NAME=${string/update:/}"
         echo "$string" >> $GITHUB_ENV
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         path: artifacts
     - uses: ncipollo/release-action@v1
