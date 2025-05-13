@@ -24,7 +24,7 @@ jobs:
       matrix:
         build_mode: [Debug, Release]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: export tag
       run: |
         string="${{ github.event.head_commit.message }}"
@@ -58,7 +58,7 @@ jobs:
       matrix:
         build_mode: [Debug, Release]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: export tag
       shell: bash
       run: |
@@ -72,7 +72,7 @@ jobs:
         cmake --install ${{ env.BUILD_FOLDER }} --prefix ${{ env.PACKAGE_FOLDER }} --config ${{ matrix.build_mode }}
     - name: compress artifacts
       run: Compress-Archive -Path '${{ env.PACKAGE_FOLDER }}' -DestinationPath 'windows-x64-${{ matrix.build_mode }}.zip'
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: windows-x64-${{ matrix.build_mode }}
         path: windows-x64-${{ matrix.build_mode }}.zip
@@ -82,7 +82,7 @@ jobs:
     needs: [linux, windows]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: export tag
       run: |
         string="${{ github.event.head_commit.message }}"
